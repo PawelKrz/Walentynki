@@ -11,6 +11,7 @@
             text-align: center;
             padding: 50px;
             color: #b30000;
+            position: relative;
         }
 
         h1 {
@@ -19,9 +20,9 @@
         }
 
         button {
-            padding: 20px 40px;
+            padding: 20px 90px;
             margin: 10px;
-            font-size: 1.5em;
+            font-size: 2em;
             background-color: #ff4d4d;
             border: none;
             color: white;
@@ -32,6 +33,24 @@
 
         button:hover {
             background-color: #cc0000;
+        }
+
+        .animated-character {
+            position: absolute;
+            bottom: -500px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-20px);
+            }
         }
 
         .hearts {
@@ -73,24 +92,6 @@
             top: 0;
         }
 
-        #gifContainer {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-        }
-
-        #gifContainer img {
-            max-width: 100%;
-            height: auto;
-        }
-
         @keyframes float {
             from {
                 transform: translateY(100vh) rotate(45deg);
@@ -102,18 +103,21 @@
     </style>
 </head>
 <body>
-    <h1>❤️ Czy zostaniesz moją walentynką? ❤️</h1>
+    <h1 id="headerText">❤️ Czy zostaniesz moją walentynką? ❤️</h1>
     <button id="yesBtn" onclick="yesClicked()">Tak</button>
     <button id="noBtn" onclick="noClicked()">Nie</button>
 
     <div class="hearts" id="hearts"></div>
 
-    <div id="gifContainer">
-        <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" alt="Miś z serduszkiem">
+    <div id="gifContainer" style="display: none;">
+        <img src="https://media.tenor.com/ia1ZEJgeH08AAAAi/mimibubu.gif" alt="Miś z serduszkiem">
         <h2>Kocham Cię! ❤️</h2>
     </div>
 
+    <img class="animated-character" src="https://www.icegif.com/wp-content/uploads/valentines-day-icegif-27.gif" alt="Walentynkowy miś">
+
     <script>
+        // Funkcja generująca serduszka
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
@@ -121,27 +125,85 @@
             heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
             document.getElementById('hearts').appendChild(heart);
 
+            // Usuwanie serduszka po zakończeniu animacji
             setTimeout(() => {
                 heart.remove();
             }, 5000);
         }
 
-        setInterval(createHeart, 300);
+        // Tworzenie serduszek co 300ms
+        let heartsInterval = setInterval(createHeart, 300);
 
+        // Funkcja po kliknięciu 'Tak'
         function yesClicked() {
             alert('Wiedziałem, że powiesz TAK! ❤️');
             document.getElementById('gifContainer').style.display = 'block';
+
+            // Ukrycie przycisków
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            yesBtn.style.display = 'none';
+            noBtn.style.display = 'none';
+
+            // Ukrycie walentynkowego misia
+            const character = document.querySelector('.animated-character');
+            character.style.display = 'none';
+
+            // Zmiana tekstu nagłówka
+            const headerText = document.getElementById('headerText');
+            headerText.textContent = "Jej! Jesteś moją walentynką! ❤️";
+
+            // Zwiększenie liczby serduszek
+            clearInterval(heartsInterval);
+            heartsInterval = setInterval(createHeart, 100);  // Skrócony interwał, żeby było ich więcej
         }
+
+        // Funkcja po kliknięciu 'Nie'
+        let noClickCount = 0; // Licznik kliknięć przycisku "Nie"
 
         function noClicked() {
             const yesBtn = document.getElementById('yesBtn');
             const noBtn = document.getElementById('noBtn');
 
+            // Zmiana rozmiaru czcionki przycisków
             const yesFontSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
             const noFontSize = parseFloat(window.getComputedStyle(noBtn).fontSize);
 
-            yesBtn.style.fontSize = (yesFontSize * 2) + 'px';
-            noBtn.style.fontSize = (noFontSize * 0.6) + 'px';
+            yesBtn.style.fontSize = (yesFontSize * 1.5) + 'px';
+            noBtn.style.fontSize = (noFontSize * 0.8) + 'px';
+
+            // Zmieniamy tekst przycisku w zależności od liczby kliknięć
+            noClickCount++;
+            switch (noClickCount) {
+                case 1:
+                    noBtn.textContent = "Na pewno nie chcesz?";
+                    break;
+                case 2:
+                    noBtn.textContent = "Jesteś pewna???";
+                    break;
+                case 3:
+                    noBtn.textContent = "Noo weeeź...";
+                    break;
+                case 4:
+                    noBtn.textContent = "Zrób to dla mnie!";
+                    break;
+                case 5:
+                    noBtn.textContent = "Noo, prooszę...";
+                    break;
+                case 6:
+                    noBtn.textContent = "Nie odrzucaj mnie!";
+                    break;
+                case 7:
+                    noBtn.textContent = "Proszę, nie odchodź!";
+                    break;
+                case 8:
+                    noBtn.textContent = "Tak, wiem, że chcesz!";
+                    break;
+                default:
+                    noBtn.textContent = "Nie"; // Po 8 kliknięciach wraca do początkowego stanu
+                    noClickCount = 0; // Resetujemy licznik kliknięć
+                    break;
+            }
         }
     </script>
 </body>
