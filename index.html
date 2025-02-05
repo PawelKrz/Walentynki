@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Czy zostaniesz moją walentynką?</title>
+    <style>
+        body {
+            background-color: #ffe6e6;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 50px;
+            color: #b30000;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 0.5em;
+        }
+
+        button {
+            padding: 20px 40px;
+            margin: 10px;
+            font-size: 1.5em;
+            background-color: #ff4d4d;
+            border: none;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #cc0000;
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            transform: rotate(45deg);
+            animation: float 5s infinite ease-in-out;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: -10px;
+            top: 0;
+        }
+
+        #gifContainer {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        #gifContainer img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(45deg);
+            }
+            to {
+                transform: translateY(-10vh) rotate(45deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>❤️ Czy zostaniesz moją walentynką? ❤️</h1>
+    <button id="yesBtn" onclick="yesClicked()">Tak</button>
+    <button id="noBtn" onclick="noClicked()">Nie</button>
+
+    <div class="hearts" id="hearts"></div>
+
+    <div id="gifContainer">
+        <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" alt="Miś z serduszkiem">
+        <h2>Kocham Cię! ❤️</h2>
+    </div>
+
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.getElementById('hearts').appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 300);
+
+        function yesClicked() {
+            alert('Wiedziałem, że powiesz TAK! ❤️');
+            document.getElementById('gifContainer').style.display = 'block';
+        }
+
+        function noClicked() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+
+            const yesFontSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            const noFontSize = parseFloat(window.getComputedStyle(noBtn).fontSize);
+
+            yesBtn.style.fontSize = (yesFontSize * 1.2) + 'px';
+            noBtn.style.fontSize = (noFontSize * 0.8) + 'px';
+        }
+    </script>
+</body>
+</html>
